@@ -51,11 +51,31 @@ typings/
 # Output of 'npm pack'
 *.tgz
 
-# Yarn Integrity file
-.yarn-integrity
 
 # dotenv environment variables file
 .env
 
-# next.js build output
-.next
+# OS X
+.DS_Store*
+Icon?
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+.directory
+*~
+
+
+# npm
+node_modules
+package-lock.json
+*.gz
+
+
+
+# Benchmarking
+benchmarks/graphs
