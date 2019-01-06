@@ -17,7 +17,6 @@ exports.category_list = function(req, res) {
 
 // Display detail page for a specific Category.
 exports.category_detail = function(req, res) {
-    // res.send('NOT IMPLEMENTED: Category detail: ' + req.params.id);
     Category.findById(req.params.id, function (err, category) {
         if (err) return next(err);
         res.send(category);
@@ -30,23 +29,7 @@ exports.category_create_get = function(req, res) {
 };
 
 // Handle Category create on POST.
-// exports.category_create_post = function(req, res) {
-  
-//     let category = new Category(
-//         {
-//             title: req.body.title,
-//             description: req.body.description
-//         }
-//     );
 
-//     category.save(function (err) {
-//         if (err) {
-//             return next(err);
-//         }
-//         res.send('Category Created successfully')
-//     })
-
-// };
 
 exports.category_create_post = [
   
@@ -70,16 +53,14 @@ exports.category_create_post = [
            });
 
         if (!errors.isEmpty()) {
-          //  res.render('book_form', { errors: errors.array() });
-             res.json(errors.array());
+             res.json({errors: errors.array()});
             return;
         }
         else {
             // Data from form is valid. Save book.
             category.save(function (err) {
                 if (err) { return next(err); }
-                   //successful - redirect to new book record.
-                   res.send('Category Created successfully')
+                res.json({success: 'Category Created successfully'});
                 });
         }
     }
@@ -91,7 +72,7 @@ exports.category_delete_get = function(req, res) {
 };
 
 // Handle Category delete on POST.
-exports.category_delete_post = function(req, res) {
+exports.category_delete_post = function(req, res, next) {
     Category.findByIdAndRemove(req.params.id, function (err) {
         if (err) return next(err);
         res.send('Deleted successfully!');
