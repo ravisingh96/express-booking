@@ -4,11 +4,14 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const bodyParser= require('body-parser')
+var mongoose = require('mongoose');
+var passport = require('passport');
+var config = require('./config/database');
 
 //Set up mongoose connection
-var mongoose = require('mongoose');
-var mongoDB = 'mongodb://booking_user:w9044472181@ds013579.mlab.com:13579/express_booking';
-mongoose.connect(mongoDB,{ useNewUrlParser: true });
+
+// var mongoDB = 'mongodb://booking_user:w9044472181@ds013579.mlab.com:13579/express_booking';
+mongoose.connect(config.database,{ useNewUrlParser: true });
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
@@ -16,6 +19,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var bookingRouter = require('./routes/booking');
+var api = require('./routes/api');
 
 var app = express();
 
@@ -40,7 +44,10 @@ app.use(function(req, res, next) {
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/booking', bookingRouter);
+app.use('/api', api);
 
+
+app.use(passport.initialize());
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

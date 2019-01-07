@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+var passport = require('passport');
+require('../config/passport')(passport);
 
 // Require controller modules.
 var category_controller = require('../controllers/categoryController');
@@ -33,7 +35,7 @@ router.post('/category/:id/update', category_controller.category_update_post);
 router.get('/category/:id', category_controller.category_detail);
 
 // GET request for list of all Category items.
-router.get('/categorys', category_controller.category_list);
+router.get('/categorys', passport.authenticate('jwt', { session: false}), category_controller.category_list);
 
 /// SERVICE ROUTES ///
 
@@ -86,5 +88,18 @@ router.get('/categoryinstance/:id', categoryInstance_controller.categoryInstance
 
 // GET request for list of all CategoryInstance.
 router.get('/categoryinstances', categoryInstance_controller.categoryInstance_list);
+
+getToken = function (headers) {
+    if (headers && headers.authorization) {
+      var parted = headers.authorization.split(' ');
+      if (parted.length === 2) {
+        return parted[1];
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  };
 
 module.exports = router;
